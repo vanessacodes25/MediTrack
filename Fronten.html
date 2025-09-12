@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Accounts, Roles & Permissions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    select, button {
+      margin: 5px 0;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+    button {
+      border: none;
+      background: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    #status {
+      margin-top: 20px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background: #f9f9f9;
+      min-height: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h2>User Accounts with Roles & Permissions</h2>
+
+  <label for="userSelect">Select User:</label>
+  <select id="userSelect"></select>
+
+  <p>
+    <button onclick="checkRole('admin')">Check Admin Role</button>
+    <button onclick="checkRole('editor')">Check Editor Role</button>
+    <button onclick="checkPermission('write')">Check Write Permission</button>
+    <button onclick="checkPermission('delete')">Check Delete Permission</button>
+  </p>
+
+  <div id="status">Select a user and click a button to check roles or permissions.</div>
+
+  <script>
+    // Store user accounts, roles, and permissions
+    const users = [
+      {
+        id: 1,
+        username: "karol",
+        roles: ["admin", "editor"],
+        permissions: ["read", "write", "delete"]
+      },
+      {
+        id: 2,
+        username: "alice",
+        roles: ["viewer"],
+        permissions: ["read"]
+      },
+      {
+        id: 3,
+        username: "bob",
+        roles: ["editor"],
+        permissions: ["read", "write"]
+      }
+    ];
+
+    // Populate dropdown with users
+    const userSelect = document.getElementById("userSelect");
+    users.forEach(user => {
+      const option = document.createElement("option");
+      option.value = user.id;
+      option.textContent = user.username;
+      userSelect.appendChild(option);
+    });
+
+    // Get selected user
+    function getSelectedUser() {
+      const id = parseInt(userSelect.value, 10);
+      return users.find(user => user.id === id);
+    }
+
+    // Check if user has a role
+    function checkRole(role) {
+      const user = getSelectedUser();
+      if (!user) {
+        return displayStatus("No user selected.");
+      }
+      const hasRole = user.roles.includes(role);
+      displayStatus(`${user.username} has role "${role}": ${hasRole}`);
+    }
+
+    // Check if user has a permission
+    function checkPermission(permission) {
+      const user = getSelectedUser();
+      if (!user) {
+        return displayStatus("No user selected.");
+      }
+      const hasPermission = user.permissions.includes(permission);
+      displayStatus(`${user.username} has permission "${permission}": ${hasPermission}`);
+    }
+
+    // Display results
+    function displayStatus(message) {
+      document.getElementById("status").textContent = message;
+    }
+  </script>
+</body>
+</html>
